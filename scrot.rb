@@ -3,6 +3,7 @@ require "rubygems"
 require "gtk2"
 require "tempfile"
 require 'net/http'
+require 'net/https'
 require 'uri'
 require "base64"
 require "json"
@@ -41,12 +42,28 @@ class Whiteboard
   end
 
   def post(data)
+    p "posting to #{ @domain }/api/create"
     base = Base64.encode64 data
-    res =  Net::HTTP.post_form(URI.parse("#{ @domain }/api/create"),
-      'foo' => 'bar', 'image' => base )
-    res_json = JSON.parse res.body
-    p res_json['url']
-    "#{ @domain }#{ res_json['url'] }"
+    url = URI.parse "#{ @domain }/api/create"
+    req = Net::HTTP::Post.new(url.path)
+    req.set_form_data( 'image' => base )
+    http = Net::HTTP.new(url.host, url.port)
+
+    if url.port == 443
+      http.use_ssl = true
+    end
+
+    res = http.start {|http| http.request(req) }
+    case res
+    when Net::HTTPSuccess, Net::HTTPRedirection
+      res_json = JSON.parse res.body
+      p res_json['url']
+      "#{ @domain }#{ res_json['url'] }"
+    else
+      # TODO: Show nice error to user
+      raise "Failed to post"
+    end
+
   end
 end
 
@@ -156,11 +173,9 @@ end
 if __FILE__ == $0
   config_filepath = "#{ ENV["HOME"] }/.whiteboard.yml"
 
-  domain = read_config config_filepath, "http://10.246.133.171:1337"
-  p "domain", domain
+  domain = read_config config_filepath, "https://whiteboard.opinsys.fi"
 
-
-  whiteboard = Whiteboard.new "http://10.246.133.171:1337"
+  whiteboard = Whiteboard.new domain
   ui = UI.new whiteboard
   Gtk.main
 end
