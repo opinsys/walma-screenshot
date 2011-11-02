@@ -67,6 +67,7 @@ class UI
       Gtk.main_quit
       false
     end
+
     @whiteboard = whiteboard
     main_box = Gtk::VBox.new(false, 0)
     window.add(main_box)
@@ -89,31 +90,24 @@ class UI
 
 
 
-    def open_and_quit(url)
-      @label.set_text "Opening screenshot in the browser"
-      system("gnome-open", url)
-
-      Gtk::timeout_add(2000) do
-        Gtk.main_quit
+    grab_fullscreen.signal_connect( "clicked" ) do |w|
+      window.hide_all
+      Gtk::timeout_add(10) do
+        url = @whiteboard.post capture true
+        window.show_all
+        open_and_quit url
         false
       end
-
-    end
-
-
-    grab_fullscreen.signal_connect( "clicked" ) do |w|
-      url = @whiteboard.post capture true
-      open_and_quit url
     end
 
     grab_window.signal_connect("clicked") do |w|
-      @label.set_text "Click on some window"
+      @label.set_text "Click on some window. Press esc to abort."
       # Small timeout allows the event loop to update label text.
       Gtk::timeout_add(50) do
         data = capture false
 
         if not data
-          label.set_text label_text
+          @label.set_text @label_text
           next
         end
 
@@ -131,7 +125,20 @@ class UI
     window.show_all
 
   end
+
+
+  def open_and_quit(url)
+    @label.set_text "Opening screenshot in the browser"
+    system("gnome-open", url)
+
+    Gtk::timeout_add(2000) do
+      Gtk.main_quit
+      false
+    end
+  end
+
 end
+
 
 def read_config(path, default)
   return default unless File.exist? path
