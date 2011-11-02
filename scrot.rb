@@ -75,37 +75,49 @@ box2 = Gtk::HBox.new(false, 0)
 main_box.pack_start(box1, true, true, 5)
 main_box.pack_start(box2, true, true, 5)
 
-
 # Creates a new button with the label "Button 1".
-grab_fullscreen = Gtk::Button.new("Fullscreen")
-grab_window = Gtk::Button.new("Window only")
-label = Gtk::Label.new("sdfsda")
+grab_fullscreen = Gtk::Button.new "Fullscreen"
+grab_window = Gtk::Button.new "Window only"
 
-box1.pack_start(grab_fullscreen, true, true, 0)
-box1.pack_start(grab_window, true, true, 0)
+@label_text = "Open screenshot in whiteboard"
+@label = Gtk::Label.new @label_text
 
-box2.pack_start(label, true, true, 0)
+box1.pack_start grab_fullscreen, true, true, 0
+box1.pack_start grab_window, true, true, 0
+box2.pack_start @label, true, true, 0
 
 
 
+def open_and_quit(url)
+  @label.set_text "Opening screenshot in the browser"
+  system("gnome-open", url)
 
+  Gtk::timeout_add(2000) do
+    Gtk.main_quit
+    false
+  end
+
+end
 
 
 grab_fullscreen.signal_connect( "clicked" ) do |w|
   url = whiteboard.post capture true
-  system("gnome-open", url)
-  Gtk.main_quit
+  open_and_quit url
 end
 
 grab_window.signal_connect("clicked") do |w|
-  label.set_text "Click a window"
+  @label.set_text "Click on some window"
   # Small timeout allows the event loop to update label text.
   Gtk::timeout_add(50) do
     data = capture false
-    next unless data
+
+    if not data
+      label.set_text label_text
+      next
+    end
+
     url = whiteboard.post data
-    system("gnome-open", url)
-    Gtk.main_quit
+    open_and_quit url
     false
   end
 end
