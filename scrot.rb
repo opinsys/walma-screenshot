@@ -1,4 +1,5 @@
 # Initializes Ruby/GTK2, as usual.
+require "rubygems"
 require "gtk2"
 require "tempfile"
 require 'net/http'
@@ -8,17 +9,26 @@ require "json"
 
 
 def capture(full)
-  data = nil
-  Dir.mktmpdir do |dir|
+  Dir.mktmpdir("whiteboard-screenshot") do |dir|
+
     file_path = "#{ dir }/capture.png"
+
     if full
-      `scrot #{ file_path }`
+      system('scrot', file_path)
     else
-      `scrot #{ file_path } -b -s`
+      system('scrot', file_path, '-b', '-s')
     end
-    data = File.open(file_path, "rb") { |f| f.read }
+
+    if $?.exitstatus == 0
+      File.open(file_path, "rb") { |f| f.read }
+    elsif $?.exitstatus == 2
+      # User aborted screenshot. Pressing esc etc.
+      nil
+    else
+      raise "could not call scrot"
+    end
+
   end
-  data
 end
 
 
@@ -41,6 +51,7 @@ end
 
 
 window = Gtk::Window.new
+whiteboard = Whiteboard.new "http://10.246.133.171:1337"
 
 # Specify the title and border of the window.
 window.title = "Whiteboard bootstrap"
@@ -56,37 +67,50 @@ end
 # This is described in detail in the following section.
 # The box is not really visible, it is just used as a tool to arrange 
 # widgets.
-box1 = Gtk::HBox.new(false, 0)
+main_box = Gtk::VBox.new(false, 0)
+window.add(main_box)
+box1 = Gtk::HBox.new(true, 0)
+box2 = Gtk::HBox.new(false, 0)
 
-# Put the box into the main window.
-window.add(box1)
+main_box.pack_start(box1, true, true, 5)
+main_box.pack_start(box2, true, true, 5)
+
 
 # Creates a new button with the label "Button 1".
 grab_fullscreen = Gtk::Button.new("Fullscreen")
-
-
-
-
-whiteboard = Whiteboard.new "http://10.246.133.171:1337"
+grab_window = Gtk::Button.new("Window only")
+label = Gtk::Label.new("sdfsda")
 
 box1.pack_start(grab_fullscreen, true, true, 0)
+box1.pack_start(grab_window, true, true, 0)
 
-grab_window = Gtk::Button.new("Window only")
+box2.pack_start(label, true, true, 0)
+
+
+
+
+
 
 grab_fullscreen.signal_connect( "clicked" ) do |w|
   url = whiteboard.post capture true
-  `gnome-open #{ url }`
+  system("gnome-open", url)
   Gtk.main_quit
 end
 
 grab_window.signal_connect("clicked") do |w|
-  url = whiteboard.post capture false
-  `gnome-open #{ url }`
-  Gtk.main_quit
+  label.set_text "Click a window"
+  # Small timeout allows the event loop to update label text.
+  Gtk::timeout_add(50) do
+    data = capture false
+    next unless data
+    url = whiteboard.post data
+    system("gnome-open", url)
+    Gtk.main_quit
+    false
+  end
 end
 
 
-box1.pack_start(grab_window, true, true, 0)
 
 # You may call the show method of each widgets, as follows:
 #   button1.show
