@@ -6,6 +6,8 @@ require 'net/http'
 require 'uri'
 require "base64"
 require "json"
+require "yaml"
+
 
 
 def capture(full)
@@ -50,84 +52,109 @@ end
 
 
 
-window = Gtk::Window.new
-whiteboard = Whiteboard.new "http://10.246.133.171:1337"
 
-# Specify the title and border of the window.
-window.title = "Whiteboard bootstrap"
-window.border_width = 10
+class UI
 
-# The program will directly end upon 'delete_event'.
-window.signal_connect('delete_event') do
-  Gtk.main_quit
-  false
-end
+  def initialize(whiteboard)
+    window = Gtk::Window.new
 
-# We create a box to pack widgets into.  
-# This is described in detail in the following section.
-# The box is not really visible, it is just used as a tool to arrange 
-# widgets.
-main_box = Gtk::VBox.new(false, 0)
-window.add(main_box)
-box1 = Gtk::HBox.new(true, 0)
-box2 = Gtk::HBox.new(false, 0)
+    # Specify the title and border of the window.
+    window.title = "Whiteboard bootstrap"
+    window.border_width = 10
 
-main_box.pack_start(box1, true, true, 5)
-main_box.pack_start(box2, true, true, 5)
+    # The program will directly end upon 'delete_event'.
+    window.signal_connect('delete_event') do
+      Gtk.main_quit
+      false
+    end
+    @whiteboard = whiteboard
+    main_box = Gtk::VBox.new(false, 0)
+    window.add(main_box)
+    box1 = Gtk::HBox.new(true, 0)
+    box2 = Gtk::HBox.new(false, 0)
 
-# Creates a new button with the label "Button 1".
-grab_fullscreen = Gtk::Button.new "Fullscreen"
-grab_window = Gtk::Button.new "Window only"
+    main_box.pack_start(box1, true, true, 5)
+    main_box.pack_start(box2, true, true, 5)
 
-@label_text = "Open screenshot in whiteboard"
-@label = Gtk::Label.new @label_text
+    # Creates a new button with the label "Button 1".
+    grab_fullscreen = Gtk::Button.new "Fullscreen"
+    grab_window = Gtk::Button.new "Window only"
 
-box1.pack_start grab_fullscreen, true, true, 0
-box1.pack_start grab_window, true, true, 0
-box2.pack_start @label, true, true, 0
+    @label_text = "Open screenshot in whiteboard"
+    @label = Gtk::Label.new @label_text
 
+    box1.pack_start grab_fullscreen, true, true, 0
+    box1.pack_start grab_window, true, true, 0
+    box2.pack_start @label, true, true, 0
 
 
-def open_and_quit(url)
-  @label.set_text "Opening screenshot in the browser"
-  system("gnome-open", url)
 
-  Gtk::timeout_add(2000) do
-    Gtk.main_quit
-    false
-  end
+    def open_and_quit(url)
+      @label.set_text "Opening screenshot in the browser"
+      system("gnome-open", url)
 
-end
+      Gtk::timeout_add(2000) do
+        Gtk.main_quit
+        false
+      end
 
-
-grab_fullscreen.signal_connect( "clicked" ) do |w|
-  url = whiteboard.post capture true
-  open_and_quit url
-end
-
-grab_window.signal_connect("clicked") do |w|
-  @label.set_text "Click on some window"
-  # Small timeout allows the event loop to update label text.
-  Gtk::timeout_add(50) do
-    data = capture false
-
-    if not data
-      label.set_text label_text
-      next
     end
 
-    url = whiteboard.post data
-    open_and_quit url
-    false
+
+    grab_fullscreen.signal_connect( "clicked" ) do |w|
+      url = @whiteboard.post capture true
+      open_and_quit url
+    end
+
+    grab_window.signal_connect("clicked") do |w|
+      @label.set_text "Click on some window"
+      # Small timeout allows the event loop to update label text.
+      Gtk::timeout_add(50) do
+        data = capture false
+
+        if not data
+          label.set_text label_text
+          next
+        end
+
+        url = @whiteboard.post data
+        open_and_quit url
+        false
+      end
+    end
+
+    # You may call the show method of each widgets, as follows:
+    #   button1.show
+    #   button2.show
+    #   box1.show
+    #   window.show 
+    window.show_all
+
+  end
+end
+
+def read_config(path, default)
+  return default unless File.exist? path
+  File.open(path, "r") do |f|
+    config = YAML::load f.read
+    if config["domain"]
+      config["domain"]
+    else
+      default
+    end
   end
 end
 
 
+if __FILE__ == $0
+  config_filepath = "#{ ENV["HOME"] }/.whiteboard.yml"
 
-# You may call the show method of each widgets, as follows:
-#   button1.show
-#   button2.show
-#   box1.show
-#   window.show 
-window.show_all
-Gtk.main
+  domain = read_config config_filepath, "http://10.246.133.171:1337"
+  p "domain", domain
+
+
+  whiteboard = Whiteboard.new "http://10.246.133.171:1337"
+  ui = UI.new whiteboard
+  Gtk.main
+end
+
