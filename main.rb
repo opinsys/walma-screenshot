@@ -55,7 +55,7 @@ class Whiteboard
 
     res = http.start {|http| http.request(req) }
     case res
-    when Net::HTTPSuccess, Net::HTTPRedirection
+    when Net::HTTPSuccess
       res_json = JSON.parse res.body
       p res_json['url']
       "#{ @domain }#{ res_json['url'] }"
