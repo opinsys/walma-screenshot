@@ -10,15 +10,18 @@ require "json"
 require "yaml"
 
 
-
-def capture(full)
+# Bit cheating here. We'll use scrot command line tool for capturing the
+# screenshots. It has pretty crappy interfaces so we have to fiddle with temp
+# directories here.
+def capture(fullscreen)
   Dir.mktmpdir("whiteboard-screenshot") do |dir|
 
     file_path = "#{ dir }/capture.png"
 
-    if full
+    if fullscreen
       system('scrot', file_path)
     else
+      # Single window only
       system('scrot', file_path, '-b', '-s')
     end
 
@@ -30,7 +33,6 @@ def capture(full)
     else
       raise "could not call scrot"
     end
-
   end
 end
 
@@ -39,17 +41,16 @@ end
 class Whiteboard
   def initialize(domain)
     @domain = domain
+    @url = URI.parse "#{ domain }/api/create"
   end
 
   def post(data)
-    p "posting to #{ @domain }/api/create"
     base = Base64.encode64 data
-    url = URI.parse "#{ @domain }/api/create"
-    req = Net::HTTP::Post.new(url.path)
+    req = Net::HTTP::Post.new(@url.path)
     req.set_form_data( 'image' => base )
-    http = Net::HTTP.new(url.host, url.port)
+    http = Net::HTTP.new(@url.host, @url.port)
 
-    if url.port == 443
+    if @url.port == 443
       http.use_ssl = true
     end
 
@@ -63,7 +64,6 @@ class Whiteboard
       # TODO: Show nice error to user
       raise "Failed to post"
     end
-
   end
 end
 
@@ -161,8 +161,8 @@ def read_config(path, default)
   return default unless File.exist? path
   File.open(path, "r") do |f|
     config = YAML::load f.read
-    if config["domain"]
-      config["domain"]
+    if config["server"]
+      config["server"]
     else
       default
     end
