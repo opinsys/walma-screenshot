@@ -2,7 +2,7 @@
 
 ## Dependencies
 
-    ruby ruby1.8 libgnome2-ruby rubygems scrot
+    ruby ruby1.8 libgnome2-ruby libjson-ruby libopenssl-ruby rubygems scrot
 
 ## Configuration
 
