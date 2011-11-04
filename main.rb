@@ -54,7 +54,9 @@ class Whiteboard
       http.use_ssl = true
     end
 
+    p "posting to #{ @domain }"
     res = http.start {|http| http.request(req) }
+    p "done"
     case res
     when Net::HTTPSuccess
       res_json = JSON.parse res.body
@@ -110,9 +112,17 @@ class UI
     grab_fullscreen.signal_connect( "clicked" ) do |w|
       window.hide_all
       Gtk::timeout_add(10) do
-        url = @whiteboard.post capture true
-        window.show_all
-        open_and_quit url
+
+        begin
+          url = @whiteboard.post capture true
+        rescue SystemCallError
+          show_error
+        else
+          open_and_quit url
+        ensure
+          window.show_all
+        end
+
         false
       end
     end
@@ -128,8 +138,13 @@ class UI
           next
         end
 
-        url = @whiteboard.post data
-        open_and_quit url
+        begin
+          url = @whiteboard.post data
+        rescue SystemCallError
+          show_error
+        else
+          open_and_quit url
+        end
         false
       end
     end
@@ -143,6 +158,10 @@ class UI
 
   end
 
+  def show_error
+    msg = $!
+    @label.set_text "ERROR: #{ msg }"
+  end
 
   def open_and_quit(url)
     @label.set_text "Opening screenshot in the browser"
