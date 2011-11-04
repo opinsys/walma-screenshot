@@ -2,7 +2,7 @@
 
 ## Dependencies
 
-    ruby1.8 libgnome2-ruby scrot
+    ruby ruby1.8 libgnome2-ruby rubygems scrot
 
 ## Configuration
 
