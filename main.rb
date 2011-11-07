@@ -112,7 +112,6 @@ class UI
     box3.pack_start exit_button, true, true, 0
 
 
-    # TODO
     exit_button.signal_connect("clicked") do |w|
       Gtk.main_quit
     end
