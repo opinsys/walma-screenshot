@@ -92,13 +92,16 @@ class UI
     window.add(main_box)
     box1 = Gtk::HBox.new(true, 0)
     box2 = Gtk::HBox.new(false, 0)
+    box3 = Gtk::HBox.new(false, 0)
 
     main_box.pack_start(box1, true, true, 5)
     main_box.pack_start(box2, true, true, 5)
+    main_box.pack_start(box3, true, true, 5)
 
     # Creates a new button with the label "Button 1".
     grab_fullscreen = Gtk::Button.new "Fullscreen"
     grab_window = Gtk::Button.new "Window only"
+    exit_button = Gtk::Button.new "Exit"
 
     @label_text = "Open screenshot in whiteboard"
     @label = Gtk::Label.new @label_text
@@ -106,8 +109,13 @@ class UI
     box1.pack_start grab_fullscreen, true, true, 0
     box1.pack_start grab_window, true, true, 0
     box2.pack_start @label, true, true, 0
+    box3.pack_start exit_button, true, true, 0
 
 
+    # TODO
+    exit_button.signal_connect("clicked") do |w|
+      Gtk.main_quit
+    end
 
     grab_fullscreen.signal_connect( "clicked" ) do |w|
       window.hide_all
