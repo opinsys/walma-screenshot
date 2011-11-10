@@ -1,5 +1,6 @@
+#!/usr/bin/ruby
+
 # Initializes Ruby/GTK2, as usual.
-require "rubygems"
 require "gtk2"
 require "tempfile"
 require 'net/http'
@@ -14,7 +15,7 @@ require "yaml"
 # screenshots. It has pretty crappy interfaces so we have to fiddle with temp
 # directories here.
 def capture(fullscreen)
-  Dir.mktmpdir("whiteboard-screenshot") do |dir|
+  Dir.mktmpdir("whiteboard-screenshot-") do |dir|
 
     file_path = "#{ dir }/capture.png"
 
@@ -184,14 +185,10 @@ end
 
 
 def read_config(path, default)
-  return default unless File.exist? path
-  File.open(path, "r") do |f|
-    config = YAML::load f.read
-    if config["server"]
-      config["server"]
-    else
-      default
-    end
+  begin
+    (YAML::load_file(path))['server']
+  rescue
+    default
   end
 end
 

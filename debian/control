@@ -1,0 +1,14 @@
+Source: puavo-whiteboard-screenshot
+Section: misc
+Priority: extra
+Maintainer: Juha Erkkilä <Juha.Erkkila@opinsys.fi>
+Build-Depends: debhelper (>= 7)
+Standards-Version: 3.8.3
+Homepage: https://github.com/opinsys/puavo-whiteboard-screenshot
+
+Package: puavo-whiteboard-screenshot
+Architecture: all
+Depends: ${misc:Depends}, libgtk2-ruby, libjson-ruby, libopenssl-ruby, ruby, scrot
+Description: Screenshot tool for puavo-whiteboard
+ puavo-whiteboard-screenshot takes screenshots and
+ sends them to puavo-whiteboard server.
