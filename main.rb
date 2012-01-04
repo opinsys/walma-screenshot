@@ -18,21 +18,26 @@ class Screenshot
 
   attr_accessor :image
 
+  # Scrot parameters
+  FULLSCREEN = []
+  WINDOW = ['-b', '-s']
+  ACTIVE_WINDOW = ['-b', '-u']
+
   def initialize
     @max_size = 600.0
     @image = nil
   end
 
   def capture_fullscreen
-    capture true
+    capture FULLSCREEN
   end
 
   def capture_window
-    capture false
+    capture WINDOW
   end
 
   def capture_active_window
-    throw "not implemented"
+    capture ACTIVE_WINDOW
   end
 
   def png_buffer
@@ -51,17 +56,12 @@ class Screenshot
 
   private
 
-  def capture(fullscreen)
+  def capture(scrot_params)
     Dir.mktmpdir("whiteboard-screenshot-") do |dir|
 
       file_path = "#{ dir }/capture.png"
 
-      if fullscreen
-        system('scrot', file_path)
-      else
-        # Single window only
-        system('scrot', file_path, '-b', '-s')
-      end
+      system('scrot', file_path, *scrot_params)
 
       if $?.exitstatus == 0
         # File.open(file_path, "rb") { |f| f.read }
@@ -172,33 +172,12 @@ class UI
     end
 
     grab_fullscreen.signal_connect( "clicked" ) do |w|
-
-      # Hide this window show that it won't show up in the screenshot. Timeout
-      # allows the event loop to hide the window
-      @window.hide_all
-
-      Gtk::timeout_add(10) do
-
-        @screenshot.capture_fullscreen
-
-        display_thumbnail
-
-        false
-      end
+      capture_fullscreen
     end
 
 
     grab_window.signal_connect("clicked") do |w|
-      @label.set_text "Click on some window. Press esc to abort."
-      # Small timeout allows the event loop to update label text.
-      Gtk::timeout_add(10) do
-
-        @screenshot.capture_window
-
-        display_thumbnail
-
-        false
-      end
+      capture_window
     end
 
     # You may call the show method of each widgets, as follows:
@@ -209,6 +188,41 @@ class UI
     @window.show_all
 
   end
+
+
+  def capture_fullscreen
+    # Hide this window show that it won't show up in the screenshot. Timeout
+    # allows the event loop to hide the window
+    @window.hide_all
+
+    Gtk::timeout_add(10) do
+
+      @screenshot.capture_fullscreen
+
+      display_thumbnail
+      clear_status_text
+
+      false
+    end
+  end
+
+
+  def capture_window
+    @label.set_text "Click on some window or select rectangle with mous with mousee. Press esc to abort."
+    # Small timeout allows the event loop to update label text.
+    Gtk::timeout_add(10) do
+
+      @screenshot.capture_window
+
+      display_thumbnail
+      clear_status_text
+
+      false
+    end
+  end
+
+
+
 
   def display_action_buttons
 
@@ -259,6 +273,7 @@ class UI
     @action_buttons_visible = true
   end
 
+
   def save_image(path)
     set_status_text "Saving image to #{ path }"
 
@@ -305,6 +320,7 @@ class UI
 
   end
 
+
   def display_thumbnail
     if @screenshot.image
 
@@ -321,12 +337,17 @@ class UI
 
   end
 
+
   def set_error_text(msg)
     @label.set_text "ERROR: #{ msg }"
   end
 
   def set_status_text(msg)
     @label.set_text msg
+  end
+
+  def clear_status_text
+    set_status_text ""
   end
 
 end
@@ -348,6 +369,7 @@ if __FILE__ == $0
 
   whiteboard = Whiteboard.new domain
   ui = UI.new whiteboard
+  ui.capture_fullscreen
   Gtk.main
 end
 
