@@ -19,6 +19,14 @@ class UI
       false
     end
 
+    @window.signal_connect("key_press_event") do |widget, event|
+      # Escape key
+      if event.keyval == 65307
+        Gtk.main_quit
+      end
+      false
+    end
+
     @label_text = "Open screenshot in Walma Whiteboard"
     @label = Gtk::Label.new @label_text
 
