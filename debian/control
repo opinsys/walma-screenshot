@@ -1,14 +1,14 @@
-Source: puavo-whiteboard-screenshot
+Source: walma-screenshot
 Section: misc
 Priority: extra
 Maintainer: Juha Erkkilä <Juha.Erkkila@opinsys.fi>
 Build-Depends: debhelper (>= 7)
 Standards-Version: 3.8.3
-Homepage: https://github.com/opinsys/puavo-whiteboard-screenshot
+Homepage: https://github.com/opinsys/walma-screenshot
 
-Package: puavo-whiteboard-screenshot
+Package: walma-screenshot
 Architecture: all
 Depends: ${misc:Depends}, libgtk2-ruby, libjson-ruby, libopenssl-ruby, ruby, scrot
-Description: Screenshot tool for puavo-whiteboard
- puavo-whiteboard-screenshot takes screenshots and
- sends them to puavo-whiteboard server.
+Description: Screenshot tool for Walma Whiteboard
+ walma-screenshot takes screenshots and
+ sends them to Walma Whiteboard server.
