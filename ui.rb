@@ -11,17 +11,15 @@ class UI
 
     @window = Gtk::Window.new
 
-    # Specify the title and border of the window.
-    @window.title = "Whiteboard bootstrap"
+    @window.title = "Walma Screenshot"
     @window.border_width = 10
 
-    # The program will directly end upon 'delete_event'.
     @window.signal_connect('delete_event') do
       Gtk.main_quit
       false
     end
 
-    @label_text = "Open screenshot in whiteboard"
+    @label_text = "Open screenshot in Walma Whiteboard"
     @label = Gtk::Label.new @label_text
 
     main_box = Gtk::VBox.new(false, 0)
@@ -40,7 +38,7 @@ class UI
 
 
     grab_fullscreen = Gtk::Button.new "Fullscreen"
-    grab_window = Gtk::Button.new "Window only"
+    grab_window = Gtk::Button.new "Window"
 
 
     exit_button = Gtk::Button.new "Exit"
@@ -117,7 +115,7 @@ class UI
       return
     end
 
-    save_button = Gtk::Button.new "Save"
+    save_button = Gtk::Button.new "Save as..."
     open_in_whiteboard_button = Gtk::Button.new "Open in Walma"
 
     open_in_whiteboard_button.signal_connect("clicked") do |w|

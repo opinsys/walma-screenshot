@@ -3,8 +3,7 @@ require 'net/http'
 require 'net/https'
 require "base64"
 require "json"
-
-# require 'uri'
+require 'uri'
 
 class Whiteboard
 
@@ -25,7 +24,6 @@ class Whiteboard
 
     p "posting to #{ @domain }"
     res = http.start {|http| http.request(req) }
-    p "done"
     case res
     when Net::HTTPSuccess
       res_json = JSON.parse res.body
