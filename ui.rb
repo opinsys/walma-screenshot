@@ -91,6 +91,11 @@ class UI
     end
   end
 
+  def capture_active_window
+    @screenshot.capture_active_window
+    display_thumbnail
+  end
+
 
   def capture_window
     @label.set_text "Click on some window or select rectangle with mous with mousee. Press esc to abort."
