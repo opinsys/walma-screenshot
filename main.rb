@@ -57,20 +57,19 @@ class Screenshot
   private
 
   def capture(scrot_params)
-    Dir.mktmpdir("whiteboard-screenshot-") do |dir|
+    Dir.mktmpdir("walma-screenshot-") do |dir|
 
       file_path = "#{ dir }/capture.png"
 
       system('scrot', file_path, *scrot_params)
 
       if $?.exitstatus == 0
-        # File.open(file_path, "rb") { |f| f.read }
-        # Gdk::Pixbuf.new file_path
         @image = Gtk::Image.new file_path
       elsif $?.exitstatus == 2
         # User aborted screenshot. Pressing esc etc.
         @image = nil
       else
+        # TODO: show better error to user
         raise "could not call scrot"
       end
 
