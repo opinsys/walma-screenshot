@@ -28,7 +28,7 @@ if __FILE__ == $0
   OptionParser.new do |opts|
     opts.banner = "Usage: walma-screenshot [options]"
 
-    opts.on("-a", "--active-window", "Capture active window") do |v|
+    opts.on("-w", "--window", "Grab the active window instead of the entire screen") do |v|
         options[:active_window] = true
     end
 
