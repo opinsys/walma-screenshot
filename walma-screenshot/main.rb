@@ -28,7 +28,7 @@ def main
   config_filepath = "#{ ENV["HOME"] }/.config/walma-screenshot.yml"
 
   options = {}
-  options[:url] = read_config config_filepath, "https://whiteboard.opinsys.fi"
+  options[:url] = read_config config_filepath, "http://walmademo.opinsys.fi"
 
   OptionParser.new do |opts|
     opts.banner = "Usage: walma-screenshot [options]"
