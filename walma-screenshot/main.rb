@@ -10,7 +10,7 @@ require "walma-screenshot/gconfscreenshot"
 
 def read_config(path, default)
   begin
-    (YAML::load_file(path))['server']
+    YAML::load_file(path)['server']
   rescue
     default
   end
