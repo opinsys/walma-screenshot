@@ -19,7 +19,7 @@ end
 
 
 
-# I won't a price for this language detection
+# I won't get a price for this language detection
 if ENV["LANG"].match /fi/
   $translations = Translations.new "fi"
 else
