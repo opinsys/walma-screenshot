@@ -33,14 +33,18 @@ class Screenshot
     @image.pixbuf.save_to_buffer "png"
   end
 
+  # Returns a new Image that is made to fit in @max_size square
   def thumbnail
     return if @image.nil?
 
-    width, height = @image.pixbuf.width.to_f, @image.pixbuf.height.to_f
+    size = [ @image.pixbuf.width.to_f, @image.pixbuf.height.to_f ]
 
-    ratio = [ @max_size / width, @max_size / height].min
+    if size.any? { |v| v > @max_size }
+      ratio = size.map {  |v| @max_size / v }.min
+      size = size.map { |v| (v * ratio).to_i }
+    end
 
-    Gtk::Image.new @image.pixbuf.scale( (width * ratio).to_i, (height * ratio).to_i )
+    Gtk::Image.new @image.pixbuf.scale( *size )
   end
 
   private
