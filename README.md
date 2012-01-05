@@ -20,6 +20,8 @@ And try hitting Print Screen :)
 
     debuild -us -uc
 
+http://developer.ubuntu.com/packaging/html/packaging-new-software.html
+https://help.launchpad.net/Packaging/PPA/BuildingASourcePackage
 
 ## Configuration
 
