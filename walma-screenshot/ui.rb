@@ -144,6 +144,7 @@ class UI
                                      [Gtk::Stock::SAVE, Gtk::Dialog::RESPONSE_ACCEPT])
 
       dialog.filter = Gtk::FileFilter.new
+      dialog.do_overwrite_confirmation = true
       dialog.filter.add_pattern "*.png"
 
 
@@ -156,8 +157,6 @@ class UI
       end
 
       dialog.destroy
-
-      # TODO: Ask if user really wants to override existing files
 
       if filepath
         save_image filepath
