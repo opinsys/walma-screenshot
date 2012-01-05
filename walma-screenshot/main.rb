@@ -18,13 +18,13 @@ end
 
 
 
-
-# I won't get a price for this language detection
-if ENV["LANG"].match /fi/
-  $translations = Translations.new "fi"
-else
-  $translations = Translations.new "en"
+lang = ENV['LANG'].match(/^([a-z]{2})/)[1]
+if lang.nil? or lang.empty?
+  $stderr.puts "Could not find language from LANG"
+  lang = "en"
 end
+
+$translations = Translations.new lang.downcase
 
 # Add translation tool to everywhere
 class Object
