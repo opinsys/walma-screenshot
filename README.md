@@ -16,10 +16,14 @@ Tested with ruby 1.8 on Ubuntu 10.04.
 
 And try hitting Print Screen :)
 
+## Building deb-package
+
+    debuild -us -uc
+
 
 ## Configuration
 
-Optionally you can set ~/.config/walma-screenshot.yml with different server:
+Optionally you can set ~/.config/walma-screenshot.yml with a different server:
 
     server: http://10.0.0.7:1337
 
