@@ -10,6 +10,7 @@ class UI
     @whiteboard = whiteboard
 
     @window = Gtk::Window.new
+    @window.modal = true
 
     @window.title = "Walma Screenshot"
     @window.border_width = 10
@@ -128,14 +129,14 @@ class UI
       return
     end
 
-    save_button = Gtk::Button.new "Save as..."
-    open_in_whiteboard_button = Gtk::Button.new "Open in Walma"
+    @save_button = Gtk::Button.new "Save as..."
+    @open_in_whiteboard_button = Gtk::Button.new "Open in Walma"
 
-    open_in_whiteboard_button.signal_connect("clicked") do |w|
+    @open_in_whiteboard_button.signal_connect("clicked") do |w|
       open_screenshot_in_whiteboard
     end
 
-    save_button.signal_connect("clicked") do |w|
+    @save_button.signal_connect("clicked") do |w|
       dialog = Gtk::FileChooserDialog.new("Open File",
                                      @window,
                                      Gtk::FileChooser::ACTION_SAVE,
@@ -164,8 +165,8 @@ class UI
 
     end
 
-    @action_buttons_box.pack_start open_in_whiteboard_button, true, true, 0
-    @action_buttons_box.pack_start save_button, true, true, 0
+    @action_buttons_box.pack_start @open_in_whiteboard_button, true, true, 0
+    @action_buttons_box.pack_start @save_button, true, true, 0
 
     @window.show_all
 
@@ -229,11 +230,10 @@ class UI
 
       @image_box.pack_start @screenshot.thumbnail, true, true, 0
 
+      display_action_buttons
       @window.show_all
+      @window.set_focus @open_in_whiteboard_button
     end
-
-    display_action_buttons
-
   end
 
 
