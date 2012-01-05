@@ -5,6 +5,7 @@ require "optparse"
 require "walma-screenshot/whiteboard"
 require "walma-screenshot/screenshot"
 require "walma-screenshot/ui"
+require "walma-screenshot/gconfscreenshot"
 
 
 def read_config(path, default)
@@ -27,6 +28,7 @@ end
 
 def main
   config_filepath = "#{ ENV["HOME"] }/.config/walma-screenshot.yml"
+  screenshot_conf = GConfScreenshot.new "walma-screenshot", "walma-screenshot --window"
 
   options = {}
   options[:url] = read_config config_filepath, "http://walmademo.opinsys.fi"
@@ -43,18 +45,23 @@ def main
     end
 
     opts.on("--activate", "Activate walma-screenshot on Print Screen button. Only for Gnome 2!") do |v|
-      options[:activate_tool] = "walma"
+      options[:activate] = true
     end
 
     opts.on("--deactivate", "Restore gnome-screenshot") do |v|
-      options[:activate_tool] = "gnome"
+      options[:deactivate] = true
     end
 
   end.parse!
 
 
-  if options[:activate_tool]
-    set_screenshot_tool_for_metacity options[:activate_tool]
+  if options[:activate]
+    screenshot_conf.activate
+    return
+  end
+
+  if options[:deactivate]
+    screenshot_conf.restore_gnome
     return
   end
 
