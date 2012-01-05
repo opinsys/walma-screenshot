@@ -1,8 +1,11 @@
 
 require "gtk2"
 
+require "walma-screenshot/translations"
+
 
 class UI
+
 
   def initialize(whiteboard)
 
@@ -17,7 +20,7 @@ class UI
     @window.default_height = 600
 
 
-    @window.title = "Walma Screenshot"
+    @window.title = _ "Walma Screenshot"
     @window.border_width = 10
 
     @window.signal_connect('delete_event') do
@@ -33,11 +36,10 @@ class UI
       false
     end
 
-    @label_text = "Open screenshot in Walma Whiteboard"
-    @label = Gtk::Label.new @label_text
+    @label = Gtk::Label.new
 
-    title = Gtk::Label.new "foo"
-    title.set_markup "<b><big>Capture</big></b>"
+    title = Gtk::Label.new ""
+    title.set_markup "<b><big>#{ _ "Capture" }</big></b>"
 
     @main_box = Gtk::VBox.new(false, 0)
     @window.add(@main_box)
@@ -60,10 +62,10 @@ class UI
     display_settings
 
 
-    grab_fullscreen = Gtk::Button.new "Fullscreen"
-    grab_window = Gtk::Button.new "Window"
+    grab_fullscreen = Gtk::Button.new _"Fullscreen"
+    grab_window = Gtk::Button.new _"Window"
 
-    exit_button = Gtk::Button.new "Exit"
+    exit_button = Gtk::Button.new _"Exit"
 
 
     capture_buttons_box.pack_start grab_fullscreen, true, true, 0
@@ -120,7 +122,7 @@ class UI
 
 
   def capture_window
-    @label.set_text "Click on some window or select rectangle with mouse with mouse. Press esc to abort."
+    @label.set_text _"Click on some window or select rectangle with mouse. Press esc to abort."
     # Small timeout allows the event loop to update label text.
     Gtk::timeout_add(10) do
 
@@ -142,20 +144,20 @@ class UI
       return
     end
 
-    @save_button = Gtk::Button.new "Save as..."
-    @open_in_whiteboard_button = Gtk::Button.new "Open in Walma"
+    @save_button = Gtk::Button.new _"Save as..."
+    @open_in_whiteboard_button = Gtk::Button.new _"Open in Walma"
 
     @open_in_whiteboard_button.signal_connect("clicked") do |w|
       open_screenshot_in_whiteboard
     end
 
     @save_button.signal_connect("clicked") do |w|
-      dialog = Gtk::FileChooserDialog.new("Open File",
+      dialog = Gtk::FileChooserDialog.new(_("Choose file"),
                                      @window,
                                      Gtk::FileChooser::ACTION_SAVE,
                                      nil,
-                                     [Gtk::Stock::CANCEL, Gtk::Dialog::RESPONSE_CANCEL],
-                                     [Gtk::Stock::SAVE, Gtk::Dialog::RESPONSE_ACCEPT])
+                                     [_("Cancel"), Gtk::Dialog::RESPONSE_CANCEL],
+                                     [_("Save"), Gtk::Dialog::RESPONSE_ACCEPT])
 
       dialog.filter = Gtk::FileFilter.new
       dialog.do_overwrite_confirmation = true
@@ -187,7 +189,7 @@ class UI
   end
 
   def display_settings
-    toggle_active = Gtk::CheckButton.new "Use from Print Screen button"
+    toggle_active = Gtk::CheckButton.new _"Use from Print Screen button"
     toggle_active.active = @screenshot_conf.active?
     toggle_active.signal_connect "toggled" do
       if toggle_active.active?
@@ -202,7 +204,7 @@ class UI
 
 
   def save_image(path)
-    set_status_text "Saving image to #{ path }"
+    set_status_text _("Saving image to") + " " +path
 
     Gtk::timeout_add(10) do
 
@@ -213,12 +215,7 @@ class UI
         next
       end
 
-      set_status_text "Image was saved to #{ path }. Exiting..."
-
-      Gtk::timeout_add(2000) do
-        Gtk.main_quit
-        false
-      end
+      Gtk.main_quit
 
       false
     end
@@ -226,7 +223,7 @@ class UI
 
 
   def open_screenshot_in_whiteboard
-    set_status_text "Opening screenshot in web browser..."
+    set_status_text _"Opening screenshot in web browser..."
     Gtk::timeout_add(10) do
 
       begin

@@ -26,9 +26,27 @@ end
 
 
 
+
+# I won't a price for this language detection
+if ENV["LANG"].match /fi/
+  $translations = Translations.new "fi"
+else
+  $translations = Translations.new "en"
+end
+
+# Add translation tool to everywhere
+class Object
+  def _(s)
+   $translations.get s
+  end
+end
+
+
 def main
+
   config_filepath = "#{ ENV["HOME"] }/.config/walma-screenshot.yml"
   screenshot_conf = GConfScreenshot.new "walma-screenshot", "walma-screenshot --window"
+
 
   options = {}
   options[:url] = read_config config_filepath, "http://walmademo.opinsys.fi"
