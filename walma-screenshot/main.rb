@@ -17,11 +17,12 @@ end
 
 
 # walma-screenshot and gnome-screenshot have similar interface here
-def set_screenshot_tool(name)
+def set_screenshot_tool_for_metacity(name)
   `gconftool --type string --set /apps/metacity/keybinding_commands/command_screenshot "#{ name }-screenshot"`
   `gconftool --type string --set /apps/metacity/keybinding_commands/command_window_screenshot "#{ name }-screenshot --window"`
   puts "Screenshot tool is now set to #{ name }-screenshot"
 end
+
 
 
 def main
@@ -37,7 +38,7 @@ def main
         options[:active_window] = true
     end
 
-    opts.on("-u", "--walma-url", "iURL of the Walma Whiteboard. Defaults to #{ options[:url]} ") do |v|
+    opts.on("-a", "--walma-address URL", "URL of the Walma Whiteboard. Defaults to #{ options[:url]} ") do |v|
         options[:url] = v
     end
 
@@ -53,7 +54,7 @@ def main
 
 
   if options[:activate_tool]
-    set_screenshot_tool options[:activate_tool]
+    set_screenshot_tool_for_metacity options[:activate_tool]
     return
   end
 

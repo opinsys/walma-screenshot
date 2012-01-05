@@ -157,6 +157,8 @@ class UI
 
       dialog.destroy
 
+      # TODO: Ask if user really wants to override existing files
+
       if filepath
         save_image filepath
       end
