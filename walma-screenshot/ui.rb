@@ -8,6 +8,7 @@ class UI
 
     @screenshot = Screenshot.new
     @whiteboard = whiteboard
+    @screenshot_conf = GConfScreenshot.new "walma-screenshot", "walma-screenshot --window"
 
     @window = Gtk::Window.new
     @window.modal = true
@@ -38,25 +39,29 @@ class UI
     title = Gtk::Label.new "foo"
     title.set_markup "<b><big>Capture</big></b>"
 
-    main_box = Gtk::VBox.new(false, 0)
-    @window.add(main_box)
+    @main_box = Gtk::VBox.new(false, 0)
+    @window.add(@main_box)
     capture_buttons_box = Gtk::HBox.new(true, 0)
     @action_buttons_box = Gtk::HBox.new(true, 0)
     status = Gtk::HBox.new(false, 0)
     exit_button_box = Gtk::HBox.new(false, 0)
     @image_box = Gtk::HBox.new(false, 0)
 
-    main_box.pack_start(title, true, true, 5)
-    main_box.pack_start(status, true, true, 5)
-    main_box.pack_start(capture_buttons_box, true, true, 5)
-    main_box.pack_start(@image_box, true, true, 5)
-    main_box.pack_start(@action_buttons_box, true, true, 5)
-    main_box.pack_start(exit_button_box, true, true, 5)
+
+
+    @main_box.pack_start(title, true, true, 5)
+    @main_box.pack_start(status, true, true, 5)
+    @main_box.pack_start(capture_buttons_box, true, true, 5)
+    @main_box.pack_start(@image_box, true, true, 5)
+    @main_box.pack_start(@action_buttons_box, true, true, 5)
+    @main_box.pack_start(exit_button_box, true, true, 5)
+
+    # TODO: Only when user is running Metacity
+    display_settings
 
 
     grab_fullscreen = Gtk::Button.new "Fullscreen"
     grab_window = Gtk::Button.new "Window"
-
 
     exit_button = Gtk::Button.new "Exit"
 
@@ -179,6 +184,20 @@ class UI
     @window.show_all
 
     @action_buttons_visible = true
+  end
+
+  def display_settings
+    toggle_active = Gtk::CheckButton.new "Use from Print Screen button"
+    toggle_active.active = @screenshot_conf.active?
+    toggle_active.signal_connect "toggled" do
+      if toggle_active.active?
+        @screenshot_conf.activate
+      else
+        @screenshot_conf.restore_gnome
+      end
+    end
+
+    @main_box.pack_start(toggle_active, true, true, 5)
   end
 
 
