@@ -17,14 +17,6 @@ def read_config(path, default)
 end
 
 
-# walma-screenshot and gnome-screenshot have similar interface here
-def set_screenshot_tool_for_metacity(name)
-  `gconftool --type string --set /apps/metacity/keybinding_commands/command_screenshot "#{ name }-screenshot"`
-  `gconftool --type string --set /apps/metacity/keybinding_commands/command_window_screenshot "#{ name }-screenshot --window"`
-  puts "Screenshot tool is now set to #{ name }-screenshot"
-end
-
-
 
 
 # I won't a price for this language detection
