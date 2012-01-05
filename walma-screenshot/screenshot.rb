@@ -13,7 +13,7 @@ class Screenshot
   ACTIVE_WINDOW = ['-b', '-u']
 
   def initialize
-    @max_size = 600.0
+    @max_size = 500.0
     @image = nil
   end
 
@@ -40,7 +40,7 @@ class Screenshot
     size = [ @image.pixbuf.width.to_f, @image.pixbuf.height.to_f ]
 
     if size.any? { |v| v > @max_size }
-      ratio = size.map {  |v| @max_size / v }.min
+      ratio = size.map { |v| @max_size / v }.min
       size = size.map { |v| (v * ratio).to_i }
     end
 

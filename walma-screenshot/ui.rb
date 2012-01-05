@@ -11,6 +11,10 @@ class UI
 
     @window = Gtk::Window.new
     @window.modal = true
+    @window.resizable = false
+    @window.default_width = 400
+    @window.default_height = 600
+
 
     @window.title = "Walma Screenshot"
     @window.border_width = 10
@@ -31,16 +35,20 @@ class UI
     @label_text = "Open screenshot in Walma Whiteboard"
     @label = Gtk::Label.new @label_text
 
+    title = Gtk::Label.new "foo"
+    title.set_markup "<b><big>Capture</big></b>"
+
     main_box = Gtk::VBox.new(false, 0)
     @window.add(main_box)
     capture_buttons_box = Gtk::HBox.new(true, 0)
     @action_buttons_box = Gtk::HBox.new(true, 0)
-    label_box = Gtk::HBox.new(false, 0)
+    status = Gtk::HBox.new(false, 0)
     exit_button_box = Gtk::HBox.new(false, 0)
     @image_box = Gtk::HBox.new(false, 0)
 
+    main_box.pack_start(title, true, true, 5)
+    main_box.pack_start(status, true, true, 5)
     main_box.pack_start(capture_buttons_box, true, true, 5)
-    main_box.pack_start(label_box, true, true, 5)
     main_box.pack_start(@image_box, true, true, 5)
     main_box.pack_start(@action_buttons_box, true, true, 5)
     main_box.pack_start(exit_button_box, true, true, 5)
@@ -57,7 +65,7 @@ class UI
     capture_buttons_box.pack_start grab_window, true, true, 0
 
 
-    label_box.pack_start @label, true, true, 0
+    status.pack_start @label, true, true, 0
     exit_button_box.pack_start exit_button, true, true, 0
 
 
@@ -107,7 +115,7 @@ class UI
 
 
   def capture_window
-    @label.set_text "Click on some window or select rectangle with mous with mousee. Press esc to abort."
+    @label.set_text "Click on some window or select rectangle with mouse with mouse. Press esc to abort."
     # Small timeout allows the event loop to update label text.
     Gtk::timeout_add(10) do
 
