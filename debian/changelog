@@ -1,3 +1,9 @@
+walma-screenshot (0.2) unstable; urgency=low
+
+  * Support configuring Print Screen button.
+
+ -- Esa-Matti Suuronen <esa-matti.suuronen@opinsys.fi> Mon, 9 Jan 2012 14:55:25 +0200
+
 walma-screenshot (0.1) unstable; urgency=low
 
   * Initial Release.  Code by Esa-Matti Suuronen.
