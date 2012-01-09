@@ -7,11 +7,11 @@ require "walma-screenshot/translations"
 class UI
 
 
-  def initialize(whiteboard)
+  def initialize(whiteboard, print_screen_conf)
 
     @screenshot = Screenshot.new
     @whiteboard = whiteboard
-    @printscreen_conf = CongiregurePrintScreen.new "walma-screenshot", "walma-screenshot --window"
+    @printscreen_conf = print_screen_conf
 
     @window = Gtk::Window.new
     @window.modal = true
@@ -58,7 +58,7 @@ class UI
     @main_box.pack_start(@action_buttons_box, true, true, 5)
     @main_box.pack_start(exit_button_box, true, true, 5)
 
-    if @printscreen_conf.can_configure_current_window_manager? and not @printscreen_conf.active?
+    if @printscreen_conf.can_configure_current_window_manager?
       display_settings
     end
 
@@ -198,7 +198,7 @@ class UI
         if toggle_active.active?
           @printscreen_conf.activate
         else
-          @printscreen_conf.restore
+          @printscreen_conf.restore_system_default
         end
       rescue PrintScreenConfigureFailed
         set_error_text "Failed to configure Print Screen button"

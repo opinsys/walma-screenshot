@@ -38,8 +38,7 @@ def main
 
   config_filepath = "#{ ENV["HOME"] }/.config/walma-screenshot.yml"
 
-  walma_conf = CongiregurePrintScreen.new "walma-screenshot", "walma-screenshot --window"
-  gnome_conf = CongiregurePrintScreen.new "gnome-screenshot", "gnome-screenshot --window"
+  print_screen_conf = CongiregurePrintScreen.new "walma-screenshot", "walma-screenshot --window"
 
 
   options = {}
@@ -62,13 +61,13 @@ def main
     end
 
 
-    opts.on("--restore-gnome-screenshot", "Restore gnome-screenshot for Metacity") do |v|
-      gnome_conf.activate
+    opts.on("--activate", "Activate walma-screenshot on Print Screen button") do |v|
+      print_screen_conf.activate
       options[:exit] = true
     end
 
-    opts.on("--activate", "Activate walma-screenshot on Print Screen button. Only for Metacity!") do |v|
-      walma_conf.activate
+    opts.on("--deactivate", "Restore original screenshot tool") do |v|
+      print_screen_conf.restore_system_default
       options[:exit] = true
     end
 
@@ -78,7 +77,7 @@ def main
   return if options[:exit]
 
   whiteboard = Whiteboard.new options[:url]
-  ui = UI.new whiteboard
+  ui = UI.new whiteboard, print_screen_conf
 
   # Capture screenshot on start up
   if options[:active_window]

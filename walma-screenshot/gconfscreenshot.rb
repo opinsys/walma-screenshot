@@ -7,8 +7,6 @@ class CongiregurePrintScreen
   def initialize(fullscreen_cmd, window_cmd)
     @fullscreen_cmd = fullscreen_cmd
     @window_cmd = window_cmd
-
-    @originals = [ current_fullscreen_cmd, current_window_cmd ]
   end
 
   def activate
@@ -26,8 +24,14 @@ class CongiregurePrintScreen
     true
   end
 
-  def restore
-    set_tool *@originals
+
+  def restore_system_default
+    `gconftool --unset /apps/metacity/keybinding_commands/command_screenshot`
+    assert_exit
+    `gconftool --unset /apps/metacity/keybinding_commands/command_window_screenshot`
+    assert_exit
+
+    $stderr.puts "Fullscreen tool is now '#{ current_fullscreen_cmd }' and window tool is '#{ current_window_cmd }'"
   end
 
 
@@ -39,13 +43,15 @@ class CongiregurePrintScreen
     end
   end
 
+
+
   def set_tool(fullscreen, window)
     `gconftool --type string --set /apps/metacity/keybinding_commands/command_screenshot "#{ fullscreen }"`
     assert_exit
     `gconftool --type string --set /apps/metacity/keybinding_commands/command_window_screenshot "#{ window }"`
     assert_exit
 
-    $stderr.puts "Fullscreen tool is now '#{ fullscreen }' and window tool is '#{ window }'"
+    $stderr.puts "Fullscreen tool is now '#{ current_fullscreen_cmd }' and window tool is '#{ current_window_cmd }'"
   end
 
   def current_fullscreen_cmd
