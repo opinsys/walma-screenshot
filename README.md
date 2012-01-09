@@ -12,7 +12,7 @@ Tested with ruby 1.8 on Ubuntu 10.04.
     git clone git://github.com/opinsys/walma-screenshot.git
     cd walma-screenshot
     sudo make install
-    walma-screenshot --activate
+    walma-screenshot --activate # Metacity only
 
 And try hitting Print Screen :)
 

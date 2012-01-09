@@ -57,12 +57,12 @@ def main
     end
 
 
-    opts.on("--restore-gnome-screenshot", "Restore gnome-screenshot") do |v|
+    opts.on("--restore-gnome-screenshot", "Restore gnome-screenshot for Metacity") do |v|
       gnome_conf.activate
       options[:exit] = true
     end
 
-    opts.on("--activate", "Activate walma-screenshot on Print Screen button. Only for Gnome 2!") do |v|
+    opts.on("--activate", "Activate walma-screenshot on Print Screen button. Only for Metacity!") do |v|
       walma_conf.activate
       options[:exit] = true
     end

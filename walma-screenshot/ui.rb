@@ -11,7 +11,7 @@ class UI
 
     @screenshot = Screenshot.new
     @whiteboard = whiteboard
-    @screenshot_conf = GConfScreenshot.new "walma-screenshot", "walma-screenshot --window"
+    @printscreen_conf = CongiregurePrintScreen.new "walma-screenshot", "walma-screenshot --window"
 
     @window = Gtk::Window.new
     @window.modal = true
@@ -58,8 +58,9 @@ class UI
     @main_box.pack_start(@action_buttons_box, true, true, 5)
     @main_box.pack_start(exit_button_box, true, true, 5)
 
-    # TODO: Only when user is running Metacity
-    display_settings
+    if @printscreen_conf.can_configure_current_window_manager? and not @printscreen_conf.active?
+      display_settings
+    end
 
 
     grab_fullscreen = Gtk::Button.new _"Fullscreen"
@@ -190,13 +191,19 @@ class UI
 
   def display_settings
     toggle_active = Gtk::CheckButton.new _"Use from Print Screen button"
-    toggle_active.active = @screenshot_conf.active?
+    toggle_active.active = @printscreen_conf.active?
     toggle_active.signal_connect "toggled" do
-      if toggle_active.active?
-        @screenshot_conf.activate
-      else
-        @screenshot_conf.restore_gnome
+
+      begin
+        if toggle_active.active?
+          @printscreen_conf.activate
+        else
+          @printscreen_conf.restore
+        end
+      rescue PrintScreenConfigureFailed
+        set_error_text "Failed to configure Print Screen button"
       end
+
     end
 
     @main_box.pack_start(toggle_active, true, true, 5)
