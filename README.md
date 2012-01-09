@@ -8,10 +8,22 @@ Tested with ruby 1.8 on Ubuntu 10.04.
 
 ## Installation to Ubuntu Lucid from Git
 
-    sudo apt-get install ruby libgtk2-ruby libjson-ruby libopenssl-ruby scrot git-core
+Dependencies
+
+    sudo apt-get install ruby libgtk2-ruby libjson-ruby libopenssl-ruby scrot git-core rdtool
+
+Fetch the code
+
     git clone git://github.com/opinsys/walma-screenshot.git
     cd walma-screenshot
+
+Build and install it
+
+    make
     sudo make install
+
+Activate as default screenshot tool
+
     walma-screenshot --activate # Metacity only
 
 And try hitting Print Screen :)
@@ -31,6 +43,10 @@ https://help.launchpad.net/Packaging/PPA/BuildingASourcePackage
 ### Required tools
 
     sudo apt-get install devscripts debhelper
+
+
+Man building requires `rdtool` gem.
+
 
 ### Build
 

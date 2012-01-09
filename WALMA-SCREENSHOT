@@ -1,0 +1,17 @@
+== NAME
+
+Walma Screenshot - capture the screen, a window, or an user-defined area and
+send it to Walma Whiteboard for collaborative drawing or save it to a file.
+
+== SYNOPSIS
+
+See
+
+    walma-screenshot --help
+
+
+== AUTHOR
+
+Esa-Matti Suuronen <esa-matti.suuronen@opinsys.fi>
+
+https://github.com/opinsys/walma-screenshot

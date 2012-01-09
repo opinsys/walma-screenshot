@@ -46,7 +46,12 @@ def main
   options[:url] = read_config config_filepath, "http://walmademo.opinsys.fi"
 
   OptionParser.new do |opts|
-    opts.banner = "Usage: walma-screenshot [options]"
+
+    opts.banner = %Q(
+    Walma Screenshot is an integrated Screenshot tool for Walma Whiteboard
+
+      Usage: walma-screenshot [options]
+    )
 
     opts.on("-w", "--window", "Grab the active window instead of the entire screen") do |v|
         options[:active_window] = true
