@@ -40,15 +40,11 @@ Optionally you can set ~/.config/walma-screenshot.yml with a different server:
 http://developer.ubuntu.com/packaging/html/packaging-new-software.html
 https://help.launchpad.net/Packaging/PPA/BuildingASourcePackage
 
-### Required tools
+Required tools
 
-    sudo apt-get install devscripts debhelper
+    sudo apt-get install devscripts debhelper rdtool
 
-
-Man building requires `rdtool` gem.
-
-
-### Build
+Build
 
     debuild -us -uc
 
