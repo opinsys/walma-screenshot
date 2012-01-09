@@ -51,7 +51,6 @@ class Translations
       @strings = JSON.parse data
     end
 
-    $stderr.puts "Loaded #{ @lang } with #{ @strings.size } translations from #{ @file }"
 
   end
 
