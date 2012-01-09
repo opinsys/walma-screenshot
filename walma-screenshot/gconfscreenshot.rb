@@ -1,7 +1,7 @@
 
 
 # Simple class for managing active screenshot tool for Metacity
-class GConfScreenshot
+class CongiregurePrintScreen
 
   def initialize(fullscreen_cmd, window_cmd)
     @fullscreen_cmd = fullscreen_cmd
@@ -12,13 +12,15 @@ class GConfScreenshot
     set_tool @fullscreen_cmd, @window_cmd
   end
 
-  def restore_gnome
-    set_tool "gnome-screenshot", "gnome-screenshot --window"
-  end
 
   def active?
     @fullscreen_cmd == current_fullscreen_cmd and
       @window_cmd == current_window_cmd
+  end
+
+  def can_configure_current_window_manager?
+    # TODO: Need to detect if Metaacity is running
+    true
   end
 
 

@@ -37,7 +37,9 @@ end
 def main
 
   config_filepath = "#{ ENV["HOME"] }/.config/walma-screenshot.yml"
-  screenshot_conf = GConfScreenshot.new "walma-screenshot", "walma-screenshot --window"
+
+  walma_conf = CongiregurePrintScreen.new "walma-screenshot", "walma-screenshot --window"
+  gnome_conf = CongiregurePrintScreen.new "gnome-screenshot", "gnome-screenshot --window"
 
 
   options = {}
@@ -54,26 +56,21 @@ def main
         options[:url] = v
     end
 
-    opts.on("--activate", "Activate walma-screenshot on Print Screen button. Only for Gnome 2!") do |v|
-      options[:activate] = true
+
+    opts.on("--restore-gnome-screenshot", "Restore gnome-screenshot") do |v|
+      gnome_conf.activate
+      options[:exit] = true
     end
 
-    opts.on("--deactivate", "Restore gnome-screenshot") do |v|
-      options[:deactivate] = true
+    opts.on("--activate", "Activate walma-screenshot on Print Screen button. Only for Gnome 2!") do |v|
+      walma_conf.activate
+      options[:exit] = true
     end
 
   end.parse!
 
 
-  if options[:activate]
-    screenshot_conf.activate
-    return
-  end
-
-  if options[:deactivate]
-    screenshot_conf.restore_gnome
-    return
-  end
+  return if options[:exit]
 
   whiteboard = Whiteboard.new options[:url]
   ui = UI.new whiteboard
