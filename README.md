@@ -16,16 +16,24 @@ Tested with ruby 1.8 on Ubuntu 10.04.
 
 And try hitting Print Screen :)
 
-## Building deb-package
-
-    debuild -us -uc
-
-http://developer.ubuntu.com/packaging/html/packaging-new-software.html
-https://help.launchpad.net/Packaging/PPA/BuildingASourcePackage
-
 ## Configuration
 
 Optionally you can set ~/.config/walma-screenshot.yml with a different server:
 
     server: http://10.0.0.7:1337
+
+
+## Building deb-package
+
+http://developer.ubuntu.com/packaging/html/packaging-new-software.html
+https://help.launchpad.net/Packaging/PPA/BuildingASourcePackage
+
+### Required tools
+
+    sudo apt-get install devscripts debhelper
+
+### Build
+
+    debuild -us -uc
+
 

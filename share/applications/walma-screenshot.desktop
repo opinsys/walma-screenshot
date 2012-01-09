@@ -1,0 +1,8 @@
+#!/usr/bin/env xdg-open
+[Desktop Entry]
+Type=Application
+Exec=walma-screenshot
+Name=Walma Screenshot
+Icon=walma-logo
+Terminal=false
+Categories=GTK;GNOME;Utility;
