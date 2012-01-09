@@ -7,6 +7,8 @@ require "walma-screenshot/screenshot"
 require "walma-screenshot/ui"
 require "walma-screenshot/gconfscreenshot"
 
+WALMA_VERSION = "0.2"
+
 
 def read_config(path, default)
   begin
@@ -51,6 +53,12 @@ def main
 
       Usage: walma-screenshot [options]
     )
+
+
+    opts.on("-v", "--version", "") do |v|
+      options[:exit] = true
+      puts "Walma Screenshot #{ WALMA_VERSION }"
+    end
 
     opts.on("-w", "--window", "Grab the active window instead of the entire screen") do |v|
         options[:active_window] = true
