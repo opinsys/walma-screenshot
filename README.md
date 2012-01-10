@@ -8,12 +8,6 @@ adds an option for opening the screenshot directly in Walma Whiteboard.
 It currently works best in Gnome 2 environments, but should work in others too.
 You just have map Print Screen button manually.
 
-## Dependencies
-
-    ruby libgtk2-ruby libjson-ruby libopenssl-ruby scrot
-
-Tested with ruby 1.8 on Ubuntu 10.04.
-
 ## Installation
 
 ### Ubuntu Package
