@@ -34,25 +34,6 @@ Example
     server: http://walma.example.com
 
 
-### Hacking
-
-Dependencies
-
-    sudo apt-get install ruby libgtk2-ruby libjson-ruby libopenssl-ruby scrot git-core rdtool
-
-Fetch the code
-
-    git clone git://github.com/opinsys/walma-screenshot.git
-    cd walma-screenshot
-
-Running
-
-    ruby walma-screenshot.rb
-
-Build man pages
-
-    make man
-
 
 # Copyright
 
