@@ -21,7 +21,7 @@ You can manually configure Walma Whiteboard server in
 
     /etc/walma-screenshot.yml
 
-For system wide configuration and for per user in
+for system wide configuration and for per user in
 
     ~/.config/walma-screenshot.yml
 
