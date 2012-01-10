@@ -39,6 +39,7 @@ Optionally you can set ~/.config/walma-screenshot.yml with a different server:
 
 http://developer.ubuntu.com/packaging/html/packaging-new-software.html
 https://help.launchpad.net/Packaging/PPA/BuildingASourcePackage
+http://wiki.debian.org/Packaging
 
 Required tools
 
