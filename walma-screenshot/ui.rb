@@ -66,7 +66,7 @@ class UI
 
     about = create_markup_button "<small>#{ _"About Walma"  }</small>"
     about.signal_connect("clicked") do |w|
-      `gnome-open http://walma.opinsys.com/about`
+      `xdg-open http://walma.opinsys.com/about`
     end
 
     exit_button = create_markup_button "<small>#{ _ "Exit" }</small>"
@@ -257,7 +257,7 @@ class UI
         next
       end
 
-      system("gnome-open", url)
+      system("xdg-open", url)
       Gtk::timeout_add(2000) do
         Gtk.main_quit
         false
