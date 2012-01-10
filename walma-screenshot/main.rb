@@ -10,11 +10,16 @@ require "walma-screenshot/gconfscreenshot"
 WALMA_VERSION = "0.2"
 
 
-def read_config(path, default)
+
+def read_config(default)
   begin
-    YAML::load_file(path)['server']
+    YAML::load_file("#{ ENV["HOME"] }/.config/walma-screenshot.yml")['server']
   rescue
-    default
+    begin
+      YAML::load_file("/etc/walma-screenshot.yml")['server']
+    rescue
+      default
+    end
   end
 end
 
@@ -38,13 +43,12 @@ end
 
 def main
 
-  config_filepath = "#{ ENV["HOME"] }/.config/walma-screenshot.yml"
 
   print_screen_conf = CongiregurePrintScreen.new "walma-screenshot", "walma-screenshot --window"
 
 
   options = {}
-  options[:url] = read_config config_filepath, "http://walmademo.opinsys.fi"
+  options[:url] = read_config "http://walmademo.opinsys.fi"
 
   OptionParser.new do |opts|
 
