@@ -10,8 +10,13 @@ class WhiteboardError < StandardError; end
 class Whiteboard
 
   def initialize(domain)
+    if domain[-1].chr == "/"
+      domain = domain[0...-1]
+    end
+
     @domain = domain
-    @url = URI.parse "#{ domain }/api/create"
+
+    @url = URI.parse @domain + "/api/create"
   end
 
   def post(data)
@@ -24,12 +29,12 @@ class Whiteboard
       http.use_ssl = true
     end
 
-    p "posting to #{ @domain }"
+    $stderr.puts "posting screenshot to #{ @url }"
     res = http.start {|http| http.request(req) }
     case res
     when Net::HTTPSuccess
       res_json = JSON.parse res.body
-      p res_json['url']
+      $stderr.puts "Walma gave path #{ res_json['url'] }"
       "#{ @domain }#{ res_json['url'] }"
     else
       raise WhiteboardError, _("Something failed while posting to whiteboard")
