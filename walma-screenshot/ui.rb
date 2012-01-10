@@ -66,7 +66,7 @@ class UI
 
     about = create_markup_button "<small>#{ _"About Walma"  }</small>"
     about.signal_connect("clicked") do |w|
-      `gnome-open http://opinsys.github.com/walma`
+      `gnome-open http://walma.opinsys.com/about`
     end
 
     exit_button = create_markup_button "<small>#{ _ "Exit" }</small>"
