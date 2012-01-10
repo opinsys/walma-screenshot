@@ -252,7 +252,7 @@ class UI
 
       begin
         url = @whiteboard.post @screenshot.png_buffer
-      rescue SystemCallError
+      rescue WhiteboardError
         set_error_text $!.message
         next
       end

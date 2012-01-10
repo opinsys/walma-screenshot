@@ -5,6 +5,8 @@ require "base64"
 require "json"
 require 'uri'
 
+class WhiteboardError < StandardError; end
+
 class Whiteboard
 
   def initialize(domain)
@@ -30,8 +32,7 @@ class Whiteboard
       p res_json['url']
       "#{ @domain }#{ res_json['url'] }"
     else
-      # TODO: Tell more about the error to user
-      set_error_text "Something failed while posting to whiteboard"
+      raise WhiteboardError, _("Something failed while posting to whiteboard")
     end
   end
 end
