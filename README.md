@@ -6,33 +6,13 @@ gnome-screenshot in Gnome 2 environments. It replicates the functionality and
 adds an option for opening the screenshot directly in Walma Whiteboard.
 
 It currently works best in Gnome 2 environments, but should work in others too.
-You just have map Print Screen button manually.
+You just have to map Print Screen button manually.
 
 ## Installation
 
 ### Ubuntu Package
 
 See [Downloads](https://github.com/opinsys/walma-screenshot/downloads)
-
-### From source (not recommended)
-
-Dependencies
-
-    sudo apt-get install ruby libgtk2-ruby libjson-ruby libopenssl-ruby scrot git-core rdtool
-
-Fetch the code
-
-    git clone git://github.com/opinsys/walma-screenshot.git
-    cd walma-screenshot
-
-Build and install it
-
-    make
-    sudo make install
-
-Run
-
-    walma-screenshot
 
 
 ## Configuration
@@ -52,6 +32,27 @@ The syntax is following
 Example
 
     server: http://walma.example.com
+
+
+### Hacking
+
+Dependencies
+
+    sudo apt-get install ruby libgtk2-ruby libjson-ruby libopenssl-ruby scrot git-core rdtool
+
+Fetch the code
+
+    git clone git://github.com/opinsys/walma-screenshot.git
+    cd walma-screenshot
+
+Running
+
+    ruby walma-screenshot.rb
+
+Build man pages
+
+    make man
+
 
 # Copyright
 
