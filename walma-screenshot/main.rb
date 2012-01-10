@@ -7,7 +7,7 @@ require "walma-screenshot/screenshot"
 require "walma-screenshot/ui"
 require "walma-screenshot/gconfscreenshot"
 
-WALMA_VERSION = "0.2"
+WALMA_VERSION = "0.2.1"
 
 
 

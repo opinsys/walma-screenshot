@@ -66,7 +66,7 @@ class UI
 
     about = create_markup_button "<small>#{ _"About Walma"  }</small>"
     about.signal_connect("clicked") do |w|
-      `xdg-open http://walma.opinsys.com/about`
+      `xdg-open http://walma.opinsys.fi/about`
     end
 
     exit_button = create_markup_button "<small>#{ _ "Exit" }</small>"
