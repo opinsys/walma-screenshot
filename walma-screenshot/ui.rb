@@ -38,7 +38,7 @@ class UI
 
     @label = Gtk::Label.new
 
-    title = Gtk::Label.new ""
+    title = Gtk::Label.new
     title.set_markup "<b><big>#{ _ "Capture" }</big></b>"
 
     @main_box = Gtk::VBox.new(false, 0)
@@ -46,7 +46,6 @@ class UI
     capture_buttons_box = Gtk::HBox.new(true, 0)
     @action_buttons_box = Gtk::HBox.new(true, 0)
     status = Gtk::HBox.new(false, 0)
-    exit_button_box = Gtk::HBox.new(false, 0)
     @image_box = Gtk::HBox.new(false, 0)
 
 
@@ -56,17 +55,29 @@ class UI
     @main_box.pack_start(capture_buttons_box, true, true, 5)
     @main_box.pack_start(@image_box, true, true, 5)
     @main_box.pack_start(@action_buttons_box, true, true, 5)
-    @main_box.pack_start(exit_button_box, true, true, 5)
+
+    @footer = Gtk::HBox.new(false, 0)
+    @main_box.pack_start(@footer, true, true, 5)
 
     if @printscreen_conf.can_configure_current_window_manager?
       display_settings
     end
 
 
+    about = create_markup_button "<small>#{ _"About Walma"  }</small>"
+    about.signal_connect("clicked") do |w|
+      `gnome-open http://opinsys.github.com/walma`
+    end
+
+    exit_button = create_markup_button "<small>#{ _ "Exit" }</small>"
+
+    @footer.pack_start exit_button, false, true, 0
+    @footer.pack_start about, false, true, 0
+
+
     grab_fullscreen = Gtk::Button.new _"Fullscreen"
     grab_window = Gtk::Button.new _"Window"
 
-    exit_button = Gtk::Button.new _"Exit"
 
 
     capture_buttons_box.pack_start grab_fullscreen, true, true, 0
@@ -74,7 +85,7 @@ class UI
 
 
     status.pack_start @label, true, true, 0
-    exit_button_box.pack_start exit_button, true, true, 0
+
 
 
     exit_button.signal_connect("clicked") do |w|
@@ -89,6 +100,8 @@ class UI
     grab_window.signal_connect("clicked") do |w|
       capture_window
     end
+
+
 
     # You may call the show method of each widgets, as follows:
     #   button1.show
@@ -190,10 +203,12 @@ class UI
   end
 
   def display_settings
-    toggle_active = Gtk::CheckButton.new _"Use from Print Screen button"
+
+
+    toggle_active = Gtk::CheckButton.new
+    toggle_active.add create_label "<small>#{ _"Use from Print Screen button" }</small>"
     toggle_active.active = @printscreen_conf.active?
     toggle_active.signal_connect "toggled" do
-
       begin
         if toggle_active.active?
           @printscreen_conf.activate
@@ -201,12 +216,14 @@ class UI
           @printscreen_conf.restore_system_default
         end
       rescue PrintScreenConfigureFailed
-        set_error_text "Failed to configure Print Screen button"
+        set_error_text _"Failed to configure Print Screen button"
       end
-
     end
 
-    @main_box.pack_start(toggle_active, true, true, 5)
+
+    @footer.pack_start toggle_active, true, true, 0
+
+
   end
 
 
@@ -278,6 +295,20 @@ class UI
 
   def clear_status_text
     set_status_text ""
+  end
+
+  private
+
+  def create_label(markup)
+    label = Gtk::Label.new
+    label.set_markup markup
+    label
+  end
+
+  def create_markup_button(markup)
+    button = Gtk::Button.new
+    button.add create_label markup
+    button
   end
 
 end
