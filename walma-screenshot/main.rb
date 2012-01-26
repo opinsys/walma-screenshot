@@ -13,10 +13,12 @@ WALMA_VERSION = "0.2.1"
 
 def read_config(default)
   begin
-    YAML::load_file("#{ ENV["HOME"] }/.config/walma-screenshot.yml")['server']
+    YAML::load_file("#{ ENV["HOME"] }/.config/walma-screenshot.yml")['server'] \
+      || default
   rescue
     begin
-      YAML::load_file("/etc/walma-screenshot.yml")['server']
+      YAML::load_file("/etc/walma-screenshot.yml")['server'] \
+        || default
     rescue
       default
     end
