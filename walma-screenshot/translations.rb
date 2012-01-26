@@ -19,7 +19,7 @@ class Translations
     t = @strings[s]
     return t if t and t != "__missing__"
 
-    $stderr.puts "Cannont find #{ @lang } translation for string '#{ s }'"
+    $stderr.puts "Cannot find #{ @lang } translation for string '#{ s }'"
     @strings[s] = "__missing__"
 
     if ENV["GENERATE_LANG"]
