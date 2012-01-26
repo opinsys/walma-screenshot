@@ -46,7 +46,7 @@ end
 def main
 
 
-  print_screen_conf = CongiregurePrintScreen.new "walma-screenshot", "walma-screenshot --window"
+  print_screen_conf = ConfigurePrintScreen.new "walma-screenshot", "walma-screenshot --window"
 
 
   options = {}

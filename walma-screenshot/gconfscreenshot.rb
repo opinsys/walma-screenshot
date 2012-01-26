@@ -2,7 +2,7 @@
 class PrintScreenConfigureFailed < StandardError; end
 
 # Simple class for managing active screenshot tool for Metacity
-class CongiregurePrintScreen
+class ConfigurePrintScreen
 
   def initialize(fullscreen_cmd, window_cmd)
     @fullscreen_cmd = fullscreen_cmd
